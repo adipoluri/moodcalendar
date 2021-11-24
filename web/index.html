@@ -30,6 +30,31 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
+ <!-- FIREBASE INIT -->
+ <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+ <script type="module">
+   // TODO: Add SDKs for Firebase products that you want to use
+   // https://firebase.google.com/docs/web/setup#available-libraries
+ 
+   // Your web app's Firebase configuration
+   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+   const firebaseConfig = {
+     apiKey: "AIzaSyAtrcNLhIZYhur3JRn_VUr8L4A_IyYx0tY",
+     authDomain: "moodcalendar-a5c4c.firebaseapp.com",
+     projectId: "moodcalendar-a5c4c",
+     storageBucket: "moodcalendar-a5c4c.appspot.com",
+     messagingSenderId: "467330118287",
+     appId: "1:467330118287:web:aca7345262781b3bbe76fa",
+     measurementId: "G-F0VDGJ1M43"
+   };
+ 
+   // Initialize Firebase
+   firebase.initializeApp(firebaseConfig);
+   firebase.auth();
+ </script>
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -96,6 +121,8 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+
   </script>
+
 </body>
 </html>
