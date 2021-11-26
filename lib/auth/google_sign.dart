@@ -3,7 +3,10 @@ import 'package:moodcalendar/home.dart';
 import 'auth.dart';
 
 class GoogleButton extends StatefulWidget {
-  const GoogleButton({Key? key}) : super(key: key);
+  final Function reloadPage;
+
+  // ignore: use_key_in_widget_constructors
+  const GoogleButton(this.reloadPage);
 
   @override
   _GoogleButtonState createState() => _GoogleButtonState();
@@ -39,6 +42,7 @@ class _GoogleButtonState extends State<GoogleButton> {
             print(result);
             if (result != null) {
               Navigator.of(context).pop();
+              widget.reloadPage();
             }
           }).catchError((error) {
             print('Registration Error: $error');

@@ -1,14 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:moodcalendar/auth/auth.dart';
 import 'package:moodcalendar/util/constants.dart';
+import 'package:moodcalendar/util/database.dart';
 import '../model/year.dart';
-import 'dart:math' as math;
-
-const cellRed = Color(0xffc73232);
-const cellMustard = Color(0xffd7aa22);
-const cellGrey = Color(0xffcfd4e0);
-const cellBlue = Color(0xff1553be);
-const background = Color(0xff242830);
 
 class Chart extends StatefulWidget {
   const Chart({Key? key}) : super(key: key);
@@ -20,6 +16,10 @@ class Chart extends StatefulWidget {
 class _ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
+    return AuthService.userEmail == null ? nullCalendar() : calendarWidget();
+  }
+
+  Widget nullCalendar() {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -47,6 +47,48 @@ class _ChartState extends State<Chart> {
     );
   }
 
+  Widget calendarWidget() {
+
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FireStoreUtils.firestore.collection("users").doc('ABC123').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: dark1,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            color: dark2,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: LayoutGrid(
+              gridFit: GridFit.expand,
+              columnSizes: repeat(12, [1.fr]),
+              rowSizes: repeat(32, [1.fr]),
+              columnGap: 10,
+              rowGap: 6,
+              children: [
+                for (int x = 0; x < 12; x++)
+                  for (int y = 0; y < 32; y++)
+                    getDayWidget(x, y)
+                        .withGridPlacement(columnStart: x, rowStart: y),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget getDayWidget(int month, int day) {
     if (day == 0) {
       return monthButton(month);
@@ -64,22 +106,22 @@ class _ChartState extends State<Chart> {
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         onSurface: const Color(0x1AFFFFFF), // background
-        onPrimary: const Color(0xFFB6A26A),
+        onPrimary: blue0,
         primary: getRandomColor(),
         elevation: 8,
         // foreground
       ),
       child: Center(
-          child: Text(
-            day.toString(),
-            style: const TextStyle(
-              color: dark0,
-              fontSize: 8,
-              fontFamily: 'Nerd',
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0,
-            ),
+        child: Text(
+          day.toString(),
+          style: const TextStyle(
+            color: dark0,
+            fontSize: 8,
+            fontFamily: 'Nerd',
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0,
           ),
+        ),
       ),
     );
   }
@@ -89,22 +131,22 @@ class _ChartState extends State<Chart> {
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         onSurface: const Color(0x1AFFFFFF), // background
-        onPrimary: const Color(0xFFB6A26A),
+        onPrimary: blue0,
         primary: dark3,
         elevation: 8,
         // foreground
       ),
       child: Center(
-          child: Text(
-            Year.months[month].name[0],
-            style: const TextStyle(
-              color: light2,
-              fontSize: 15,
-              fontFamily: 'Nerd',
-              fontWeight: FontWeight.bold,
-              letterSpacing: 3,
-            ),
+        child: Text(
+          Year.months[month].name[0],
+          style: const TextStyle(
+            color: light2,
+            fontSize: 15,
+            fontFamily: 'Nerd',
+            fontWeight: FontWeight.bold,
+            letterSpacing: 3,
           ),
+        ),
       ),
     );
   }

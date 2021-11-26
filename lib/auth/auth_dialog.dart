@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:moodcalendar/auth/google_sign.dart';
+import 'package:moodcalendar/util/constants.dart';
 import 'auth.dart';
 
 class AuthDialog extends StatefulWidget {
-  const AuthDialog({Key? key}) : super(key: key);
-
+  final Function reloadPage;
+ 
+  const AuthDialog(this.reloadPage, {Key? key}) : super(key: key);
+  
   @override
   _AuthDialogState createState() => _AuthDialogState();
 }
@@ -81,13 +84,13 @@ class _AuthDialogState extends State<AuthDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Center(
+                const Center(
                   child: Text(
                     'MOODLY',
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.headline1!.color,
+                      color: light2,
                       fontSize: 24,
-                      fontFamily: 'Nerd',
+                      fontFamily: 'NerdBoldItalic',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 3,
                     ),
@@ -141,7 +144,7 @@ class _AuthDialogState extends State<AuthDialog> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                const Center(child: GoogleButton()),
+                Center(child: GoogleButton(widget.reloadPage)),
                 const SizedBox(height: 30),
                 declaration(),
               ],
@@ -154,8 +157,8 @@ class _AuthDialogState extends State<AuthDialog> {
 
   // --------------- Text and TextFields --------------- //
   Padding emailText() {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
         left: 20.0,
         bottom: 8,
       ),
@@ -163,7 +166,7 @@ class _AuthDialogState extends State<AuthDialog> {
         'Email address',
         textAlign: TextAlign.left,
         style: TextStyle(
-          color: Theme.of(context).textTheme.subtitle2!.color,
+          color: light2,
           fontSize: 18,
           fontFamily: 'Nerd',
           fontWeight: FontWeight.bold,
@@ -215,8 +218,8 @@ class _AuthDialogState extends State<AuthDialog> {
   }
 
   Padding passwordText() {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
         left: 20.0,
         bottom: 8,
       ),
@@ -224,8 +227,9 @@ class _AuthDialogState extends State<AuthDialog> {
         'Password',
         textAlign: TextAlign.left,
         style: TextStyle(
-          color: Theme.of(context).textTheme.subtitle2!.color,
+          color: light2,
           fontSize: 18,
+          fontFamily: 'Nerd',
           fontWeight: FontWeight.bold,
           // letterSpacing: 3,
         ),
@@ -331,6 +335,7 @@ class _AuthDialogState extends State<AuthDialog> {
                 loginStringColor = Colors.green;
               });
               Future.delayed(const Duration(milliseconds: 500), () {
+                widget.reloadPage();
                 Navigator.of(context).pop();
               });
             }
@@ -375,7 +380,8 @@ class _AuthDialogState extends State<AuthDialog> {
                 'Log in',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  fontFamily: 'Nerd',
+                  color: light2,
                 ),
               ),
       ),
@@ -436,7 +442,8 @@ class _AuthDialogState extends State<AuthDialog> {
                 'Sign up',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  fontFamily: 'Nerd',
+                  color: light2,
                 ),
               ),
       ),
@@ -446,14 +453,15 @@ class _AuthDialogState extends State<AuthDialog> {
   // --------------- Terms of Service and Policy Declaration --------------- //
 
   Padding declaration() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
       child: Text(
         'By proceeding, you agree to our Terms of Use and confirm you have read our Privacy Policy.',
         maxLines: 2,
         style: TextStyle(
-          color: Theme.of(context).textTheme.subtitle2!.color,
+          color: light2,
           fontSize: 14,
+          fontFamily: "NerdBoldItalic",
           fontWeight: FontWeight.w300,
           // letterSpacing: 3,
         ),
